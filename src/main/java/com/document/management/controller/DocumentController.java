@@ -10,8 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.document.management.service.DocumentService;
@@ -24,35 +24,41 @@ public class DocumentController {
 	@Autowired
 	private DocumentService _documentService;
 
-	@GetMapping("/pdf")
-	public ResponseEntity<byte[]> getPdf() {
-		byte[] pdfContents = _documentService.generatePdf();
+	
+	@GetMapping("/pdfBytes")
+	public byte[] getPdfBytes(@RequestParam("id") int id) {
+		byte[] pdfContents = _documentService.getDocument(id);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
-		headers.setContentDispositionFormData("filename", "document.pdf");
+		return pdfContents;
 
-		return new ResponseEntity<>(pdfContents, headers, HttpStatus.OK);
+	}
+	
+	@GetMapping("/xmlBytes")
+	private byte[] getXmlBytes() {
 
+
+		byte[] xmlContent = _documentService.getXMLFile(1);
+
+		return xmlContent;
 	}
 
 	@GetMapping("/facture")
-	private ResponseEntity<InputStreamResource> getFacture() {
+	private ResponseEntity<InputStreamResource> getDocument(@RequestParam("id") int id,@RequestParam("name")String name) {
 
-		byte[] bytes = _documentService.getDocument();
+		byte[] bytes = _documentService.getDocument(id);
 
 		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 		InputStreamResource resource = new InputStreamResource(bis);
-
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=template.pdf")
+		
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+name+".pdf")
 				.contentType(MediaType.APPLICATION_PDF).contentLength(bytes.length).body(resource);
 
 	}
 
 	@GetMapping("/xml")
-	private ResponseEntity<byte[]> getXml() {
+	private ResponseEntity<byte[]> getXml(@RequestParam("id")int id,@RequestParam("name")String name) {
 
-		byte[] xmlContent = _documentService.getXMLFile();
+		byte[] xmlContent = _documentService.getXMLFile(id);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(org.springframework.http.MediaType.APPLICATION_XML);
@@ -65,6 +71,12 @@ public class DocumentController {
 	private String lee() {
 
 		return "Eres lo mejor que me ha pasado este 2024, te quiero mucho Shadia hermosa <3";
+	}
+	
+	@GetMapping("/sendFile")
+	private void sendFile(@RequestParam("id") int id) {
+
+		_documentService.SendEmailWithFile(id);
 	}
 
 }

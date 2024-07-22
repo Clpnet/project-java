@@ -61,7 +61,7 @@
     <div class="info">
         <div>
             <span class="label">FACTURAR A:</span>
-            <span>Banco ${descripcion}</span>
+            <span>Banco ${name} ${lastname}</span>
         </div>
         <div>
             <span class="label">N° DE FACTURA:</span>
@@ -69,7 +69,7 @@
         </div>
         <div>
             <span class="label">FECHA:</span>
-            <span>18/07/2024</span>
+            <span>${paymentDate}</span>
         </div>
     </div>
     <table class="details">
@@ -81,22 +81,15 @@
         </thead>
         <tbody>
             <tr>
-                <td>DESCRIPCIÓN DE TESTING</td>
-                <td>12,000.00</td>
+                <td>${debt}</td>
+            </tr>
+            <tr>
+                
             </tr>
         </tbody>
     </table>
     <div class="total">
-        TOTAL: S/. ${total}
-    </div>
-    
-    <div>
-    
-    ${param1}<br>
-    ${param2}<br>
-    ${param3}<br>
-    ${param4}<br>
-    ${param5}<br>
+        TOTAL: S/. ${debt}
     
     </div>
 </body>

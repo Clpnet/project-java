@@ -2,10 +2,10 @@ package com.document.management.service;
 
 
 public interface DocumentService {
-
-	byte[] generatePdf();
 	
-	byte[] getDocument();
+	byte[] getDocument(int id);
 	
-	byte[] getXMLFile();
+	byte[] getXMLFile(int id);
+	
+	void SendEmailWithFile(int id);
 }
